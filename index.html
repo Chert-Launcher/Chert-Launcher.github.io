@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0a0c10" />
   <title>燧石启动器 Chert Launcher — 双端同源的 Minecraft 启动器（稳定版 2.6.0）</title>
-  <meta name="description" content="燧石启动器（Chert Launcher）由 RLRS Studio 出品，Windows / Linux 共用核心、内置自动更新；Android 采用独立 Kotlin 重写。当前稳定版 2.6.0，提供自包含 / 轻量 / 仅GUI / 仅CLI 四种安装包。" />
+  <meta name="description" content="燧石启动器（Chert Launcher）由 RLRS Studio 出品，Windows / Linux 共用核心、内置自动更新；Android 采用独立 Kotlin 重写。当前稳定版 2.6.0，提供 GUI/CLI 自包含与轻量共六种安装包。" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -68,35 +68,49 @@
     </div></section>
 
     <section id="download" class="section alt"><div class="container">
-      <div class="section-head"><span class="kicker">DOWNLOAD</span><h2>下载 2.6.0（稳定版）</h2><p>所有安装包均从 CNB Release 直链分发（镜像至 GitHub Release），绿色无捆绑。自包含版内置 .NET 10 运行时，双击即跑。</p></div>
+      <div class="section-head"><span class="kicker">DOWNLOAD</span><h2>下载 2.6.0（稳定版）</h2><p>所有安装包均从 CNB Release 直链分发（镜像至 GitHub Release），绿色无捆绑。自包含版内置 .NET 10 运行时，双击即跑；轻量版需目标机已安装 .NET 10 桌面运行时。</p></div>
       <div class="dl-grid">
         <div class="dl-card">
           <h3>自包含合体</h3>
           <span class="tag">推荐 · 双击即跑</span>
           <p>GUI（Chert Launcher）+ CLI（chert）全部内置 .NET 10 运行时，零依赖，适合绝大多数用户。</p>
-          <span class="dl-meta">Chert-Launcher-2.6.0-win-x64.zip · 125 MB</span>
+          <span class="dl-meta">Chert-Launcher-2.6.0-win-x64.zip</span>
           <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/Chert-Launcher-2.6.0-win-x64.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
         </div>
         <div class="dl-card">
           <h3>轻量合体</h3>
           <span class="tag">需 .NET 10 运行时</span>
           <p>GUI + CLI 合体，但共享框架依赖，体积仅约 2.7 MB。需目标机已安装 .NET 10 桌面运行时。</p>
-          <span class="dl-meta">Chert-Light-2.6.0-win-x64.zip · 2.7 MB</span>
+          <span class="dl-meta">Chert-Light-2.6.0-win-x64.zip</span>
           <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/Chert-Light-2.6.0-win-x64.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
         </div>
         <div class="dl-card">
           <h3>仅 GUI 自包含</h3>
           <span class="tag">图形界面</span>
           <p>只含图形界面（Chert Launcher），自包含运行时、双击即跑。不需要命令行的用户可少下载约 44% 体积。</p>
-          <span class="dl-meta">Chert-Launcher-2.6.0-win-x64-gui.zip · 61 MB</span>
+          <span class="dl-meta">Chert-Launcher-2.6.0-win-x64-gui.zip</span>
           <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/Chert-Launcher-2.6.0-win-x64-gui.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
         </div>
         <div class="dl-card">
           <h3>仅 CLI 自包含</h3>
           <span class="tag">命令行</span>
           <p>只含 chert 命令行工具，自包含运行时，适合服务器与脚本化场景。</p>
-          <span class="dl-meta">chert-cli-2.6.0-win-x64.zip · 65 MB</span>
+          <span class="dl-meta">chert-cli-2.6.0-win-x64.zip</span>
           <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/chert-cli-2.6.0-win-x64.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
+        </div>
+        <div class="dl-card">
+          <h3>仅 GUI 轻量</h3>
+          <span class="tag">需 .NET 10 运行时</span>
+          <p>只含图形界面（Chert Launcher）的轻量版，体积更小；需目标机已安装 .NET 10 桌面运行时。</p>
+          <span class="dl-meta">Chert-Light-2.6.0-win-x64-gui.zip</span>
+          <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/Chert-Light-2.6.0-win-x64-gui.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
+        </div>
+        <div class="dl-card">
+          <h3>仅 CLI 轻量</h3>
+          <span class="tag">需 .NET 10 运行时</span>
+          <p>只含 chert 命令行工具的轻量版，适合服务器与脚本化场景；需目标机已安装 .NET 10 运行时。</p>
+          <span class="dl-meta">chert-cli-light-2.6.0-win-x64.zip</span>
+          <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/chert-cli-light-2.6.0-win-x64.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
         </div>
       </div>
       <p style="margin-top:22px;color:var(--text-2);font-size:14px;line-height:1.8">
@@ -128,7 +142,7 @@
 
 【平台与分发】
 · Windows / Linux 同步至 2.6.0；安装包从 CNB Release 直链分发（同时镜像至 GitHub Release），内置自动更新读取本页 latest.json。
-· 四个包：GUI+CLI 合体自包含、GUI+CLI 合体轻量、仅 GUI 自包含、仅 CLI 自包含。轻量版需目标机已安装 .NET 10 桌面运行时。</div>
+· 六个包：GUI+CLI 合体自包含、GUI+CLI 合体轻量、仅 GUI 自包含、仅 CLI 自包含、仅 GUI 轻量、仅 CLI 轻量。轻量版需目标机已安装 .NET 10 桌面运行时。</div>
       </div>
     </div></section>
   </main>
