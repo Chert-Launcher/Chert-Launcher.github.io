@@ -61,7 +61,7 @@ body{
 
 /* ===== 标题栏（52px, 随主标签变色） ===== */
 .titlebar{
-  height:var(--tabbar-h);background:var(--game);display:flex;align-items:center;
+  height:var(--tabbar-h);background:var(--tint,var(--game));display:flex;align-items:center;
   padding:0 12px 0 16px;position:relative;flex-shrink:0;
   transition:background .2s ease;user-select:none;
 }
@@ -119,11 +119,408 @@ body{
 .win-ctl button.close:hover{background:#E74C3C}
 .win-ctl svg{width:12px;height:12px}
 
+
+/* ===== 灵动布局（Dynamic Layout） ===== */
+/* 经典布局下 page-card 不发挥布局作用 */
+.page-card{display:contents}
+
+/* 灵动布局：标题栏透明，让索引贴浮在彩色卡片上方；
+   卡片四圆角，从标题栏下方开始，下方顶到状态栏；
+   顶部无衔接色带；索引贴动画与经典布局完全一致；
+   切换时整页卡片快速左右滚动 */
+.window.dynamic{position:relative}
+.window.dynamic .titlebar{
+  background:transparent !important;
+  position:relative;
+  z-index:20;
+}
+/* 索引贴层级略高于卡片，但动画/样式与经典布局完全一致 */
+.window.dynamic .tabs{position:relative;z-index:25}
+.window.dynamic .tab{position:relative;z-index:25}
+.window.dynamic .page-card{
+  position:absolute;
+  inset:var(--tabbar-h) 0 var(--status-h) 0;
+  border-radius:18px;
+  background:var(--tint,var(--game));
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:transform 120ms ease-out, background .2s ease;
+  z-index:1;
+  transform:translateX(0);
+}
+/* 一次滚动到位：当前卡与克隆卡并排，同时平移 */
+.window.dynamic .page-card.next{
+  position:absolute;
+  inset:var(--tabbar-h) 0 var(--status-h) 0;
+  border-radius:18px;
+  background:var(--tint,var(--game));
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  transition:transform 120ms ease-out, background .2s ease;
+  z-index:2;
+  pointer-events:none;
+  transform:translateX(0);
+}
+.window.dynamic .page-card.next.from-right,
+.window.dynamic .page-card.from-right{transform:translateX(100%)}
+.window.dynamic .page-card.next.from-left,
+.window.dynamic .page-card.from-left{transform:translateX(-100%)}
+.window.dynamic .page-card.slide-left{transform:translateX(-100%)}
+.window.dynamic .page-card.slide-right{transform:translateX(100%)}
+.window.dynamic .page-card.next.slide-left,
+.window.dynamic .page-card.next.slide-right{transform:translateX(0)}
+
+/* 移除卡片顶部衔接色带，同时去掉内容区顶部的同色渐隐带 */
+.window.dynamic .card-top-band{display:none}
+.window.dynamic .page-tint{display:none}
+
+/* 灵动布局下 body 占满卡片剩余空间，背景透明以透出卡片主色 */
+.window.dynamic #cardBody{
+  flex:1;
+  min-height:0;
+  display:flex;
+  background:transparent;
+  border-radius:18px;
+  overflow:hidden;
+}
+/* 侧边栏也透明，让整张大卡片统一显示索引贴色 */
+.window.dynamic .sidebar{background:transparent;border-right-color:color-mix(in srgb, var(--accent) 25%, transparent)}
+
+/* ===== 安卓布局（Android Layout） ===== */
+/* 经典/灵动布局下安卓元素不显示 */
+.bottom-nav{display:none}
+.top-tabs{display:none}
+
+/* 安卓布局：底部四色导航 + 内容水平滑动 */
+.window.android{position:relative;padding-bottom:calc(var(--status-h) + 64px)}
+.window.android .titlebar{background:var(--accent);transition:background .2s ease}
+.window.android .titlebar .tabs{display:none}
+.window.android .win-ctl{margin-left:auto}
+.window.android .page-tint{display:none}
+.window.android .page-card{display:contents}
+.window.android .body{flex:1;min-height:0;display:flex;position:relative}
+.window.android .sidebar{display:none}
+.window.android .content{flex:1;min-width:0;position:relative;overflow:hidden}
+
+/* 底部导航 */
+.window.android .bottom-nav{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:var(--status-h);
+  height:64px;
+  background:var(--ctrl);
+  border-top:1px solid var(--ctrl-border);
+  display:flex;
+  z-index:30;
+}
+.window.android .bottom-nav .bnav-item{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+  cursor:pointer;
+  color:var(--fg2);
+  transition:color .15s ease, background .15s ease;
+  position:relative;
+}
+.window.android .bottom-nav .bnav-item:hover{background:var(--ctrl-hover)}
+.window.android .bottom-nav .bnav-item.active{
+  color:var(--bnav-color);
+  background:color-mix(in srgb, var(--bnav-color) 12%, transparent);
+}
+.window.android .bottom-nav .bnav-item svg{
+  width:22px;
+  height:22px;
+  transition:transform .15s ease;
+}
+.window.android .bottom-nav .bnav-item.active svg{transform:scale(1.1)}
+.window.android .bottom-nav .bnav-item span{
+  font-size:11px;
+  font-weight:600;
+}
+
+/* 顶部横向子标签（用于下载/工具箱/设置） */
+.window.android .top-tabs{
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:42px;
+  background:var(--ctrl);
+  border-bottom:1px solid var(--ctrl-border);
+  display:flex;
+  align-items:center;
+  padding:0 8px;
+  gap:6px;
+  z-index:10;
+  overflow-x:auto;
+  flex-wrap:nowrap;
+  scrollbar-width:none;
+}
+.window.android .top-tabs::-webkit-scrollbar{display:none}
+.window.android .top-tabs .ttab{
+  height:28px;
+  padding:0 12px;
+  border-radius:14px;
+  font-size:12px;
+  font-weight:600;
+  color:var(--fg2);
+  background:transparent;
+  border:1px solid transparent;
+  cursor:pointer;
+  transition:all .15s ease;
+  white-space:nowrap;
+}
+.window.android .top-tabs .ttab:hover{background:var(--ctrl-hover)}
+.window.android .top-tabs .ttab.active{
+  color:var(--ttab-color);
+  background:color-mix(in srgb, var(--ttab-color) 14%, transparent);
+  border-color:color-mix(in srgb, var(--ttab-color) 40%, transparent);
+}
+
+/* 安卓布局下页面容器带顶部内边距给 top-tabs 留空 */
+.window.android .page{
+  padding-top:50px;
+  transition:transform .18s ease-out, opacity .12s ease;
+}
+.window.android .page.leave-left{transform:translateX(-25%);opacity:.6}
+.window.android .page.leave-right{transform:translateX(25%);opacity:.6}
+.window.android .page.enter-left{transform:translateX(-100%)}
+.window.android .page.enter-right{transform:translateX(100%)}
+.window.android .page.enter-done{transform:translateX(0);opacity:1}
+
+/* ===== 简约布局（Minimal Layout） ===== */
+/* 终端式半透明毛玻璃：深色半透明层、等宽标签、细线边框、泛光高亮 */
+.window.minimal{
+  background:rgba(15,17,21,0.72);
+  backdrop-filter:blur(22px) saturate(1.25);
+  -webkit-backdrop-filter:blur(22px) saturate(1.25);
+  box-shadow:0 28px 90px rgba(0,0,0,.55),0 0 0 1px rgba(255,255,255,.08) inset;
+}
+
+.window.minimal .titlebar{
+  height:40px;
+  background:rgba(26,29,36,0.55);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+  padding:0 10px 0 14px;
+  font-family:Consolas,Menlo,"Courier New",monospace;
+  justify-content:space-between;
+}
+.window.minimal .brand{
+  font-size:0;
+  letter-spacing:0;
+}
+.window.minimal .brand .spark{display:none}
+.window.minimal .brand::before{
+  content:">";
+  color:var(--accent);
+  font-weight:800;
+  margin-right:8px;
+  font-size:14px;
+}
+.window.minimal .brand::after{
+  content:"Chert";
+  font-size:14px;
+  font-weight:700;
+  color:var(--fg);
+  letter-spacing:.5px;
+}
+.window.minimal .tb-search,
+.window.minimal .dl-btn{display:none}
+
+/* 浏览器标签页式 tab：等宽、顶部圆角、紧贴排列 */
+.window.minimal .tabs{
+  position:absolute;
+  left:96px;
+  right:88px;
+  bottom:0;
+  height:auto;
+  flex:initial;
+  margin-left:0;
+  padding:0 6px;
+  justify-content:flex-start;
+  gap:0;
+  align-items:flex-end;
+}
+.window.minimal .tab{
+  height:28px;
+  width:auto;
+  min-width:96px;
+  margin-left:-1px;
+  padding:0 14px 0 12px;
+  border-radius:8px 8px 0 0;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-bottom:none;
+  color:var(--fg2);
+  font-family:Consolas,Menlo,"Courier New",monospace;
+  font-size:12px;
+  justify-content:flex-start;
+  transition:background .15s ease, border-color .15s ease, color .15s ease;
+}
+.window.minimal .tab:first-child{margin-left:0}
+.window.minimal .tab.s0,
+.window.minimal .tab.s3{border-radius:8px 8px 0 0}
+.window.minimal .tab .tlabel{
+  opacity:1;
+  font-weight:600;
+}
+.window.minimal .tab .underline{display:none}
+.window.minimal .tab.active{
+  width:auto;
+  height:29px;
+  background:rgba(15,17,21,0.72);
+  border-color:rgba(255,255,255,.12);
+  color:var(--fg);
+  filter:none;
+  box-shadow:none;
+  z-index:2;
+}
+.window.minimal .tab:hover:not(.active){
+  background:rgba(255,255,255,.08);
+  color:var(--fg);
+  filter:none;
+}
+.window.minimal .tab.expanded{width:auto}
+
+/* 窗口控制按钮缩小，终端风格，靠右 */
+.window.minimal .win-ctl{margin-left:auto}
+.window.minimal .win-ctl button{
+  width:28px;
+  height:24px;
+  border-radius:5px;
+  color:var(--fg2);
+}
+.window.minimal .win-ctl button:hover{background:rgba(255,255,255,.1);color:var(--fg)}
+
+/* 侧边栏：窄图标栏，半透明 */
+.window.minimal .sidebar{
+  width:42px;
+  background:rgba(26,29,36,0.40);
+  border-right:1px solid color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.window.minimal .sidebar:hover{width:42px}
+.window.minimal .sidebar .scroll{padding:8px 5px}
+.window.minimal .sitem{
+  height:34px;
+  padding:0;
+  margin:4px 0;
+  justify-content:center;
+  border-radius:7px;
+  background:transparent;
+}
+.window.minimal .sitem:hover{background:rgba(255,255,255,.06)}
+.window.minimal .sitem.active{background:rgba(255,255,255,.08)}
+.window.minimal .sitem .ico{margin:0;width:17px;height:17px;color:var(--fg2)}
+.window.minimal .sitem.active .ico{color:var(--fg)}
+.window.minimal .sitem .st,
+.window.minimal .sgroup{display:none}
+.window.minimal .sitem .ind{
+  left:0;
+  right:auto;
+  top:8px;
+  bottom:8px;
+  width:3px;
+  border-radius:0 3px 3px 0;
+}
+
+/* 状态栏：终端状态行 */
+.window.minimal .statusbar{
+  height:26px;
+  background:rgba(26,29,36,0.55);
+  border-top:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  font-family:Consolas,Menlo,"Courier New",monospace;
+  font-size:11px;
+  color:rgba(255,255,255,.55);
+}
+
+/* 内容区：去除色带，保持半透明背景 */
+.window.minimal .page-tint{display:none}
+.window.minimal .content{
+  background:rgba(15,17,21,0.28);
+}
+.window.minimal .page{
+  padding:22px 18px 18px;
+  transition:transform .18s ease-out, opacity .12s ease;
+}
+.window.minimal .page.leave-left{transform:translateX(-28%);opacity:.35}
+.window.minimal .page.leave-right{transform:translateX(28%);opacity:.35}
+.window.minimal .page.enter-left{transform:translateX(-100%);opacity:0}
+.window.minimal .page.enter-right{transform:translateX(100%);opacity:0}
+.window.minimal .page.enter-done{transform:translateX(0);opacity:1}
+
+/* 卡片：毛玻璃面板 */
+.window.minimal .card,
+.window.minimal .dcard,
+.window.minimal .pbox,
+.window.minimal .layout-card{
+  border-radius:8px;
+  background:rgba(26,29,36,0.45);
+  border:1px solid rgba(255,255,255,.08);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  box-shadow:none;
+}
+.window.minimal .card:hover,
+.window.minimal .dcard:hover,
+.window.minimal .pbox:hover,
+.window.minimal .layout-card:hover{
+  transform:none;
+  box-shadow:0 10px 28px rgba(0,0,0,.35);
+  border-color:rgba(255,255,255,.15);
+}
+.window.minimal .dcard .cover{
+  background:rgba(255,255,255,.04);
+}
+
+/* 主题色选择圆点 */
+.theme-dot{
+  width:28px;
+  height:28px;
+  border-radius:50%;
+  border:2px solid transparent;
+  background:var(--c);
+  cursor:pointer;
+  position:relative;
+  transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  padding:0;
+}
+.theme-dot:hover{transform:scale(1.12)}
+.theme-dot.active{
+  border-color:var(--fg);
+  box-shadow:0 0 0 2px var(--ctrl), 0 0 0 4px var(--c);
+  transform:scale(1.08);
+}
+
+/* 内容错落入场动画 */
+.reveal{
+  opacity:0;
+  transform:translateY(12px);
+  transition:opacity 180ms cubic-bezier(0.16, 1, 0.3, 1),
+             transform 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* 顶部色带滚动压缩 */
+.window.dynamic .card-top-band.compact{height:36px}
+
 /* ===== 主体 ===== */
 .body{display:flex;flex:1;min-height:0}
 
 /* 侧边栏 */
-.sidebar{width:var(--sidebar-w);flex:none;background:var(--ctrl);border-right:1px solid transparent;
+.sidebar{width:var(--sidebar-w);flex:none;background:var(--ctrl);border-right:1px solid color-mix(in srgb, var(--accent) 22%, transparent);
   overflow:hidden;transition:width .2s ease,border-color .2s ease;position:relative;z-index:5}
 .sidebar:hover{width:var(--sidebar-exp)}
 .sidebar .scroll{height:100%;overflow-y:hidden;overflow-x:hidden;padding:8px 6px}
@@ -135,7 +532,7 @@ body{
 .sitem.active .ico{color:var(--fg)}
 .sitem .st{font-size:13px;white-space:nowrap;font-weight:600;overflow:hidden;opacity:1;transition:opacity .15s ease}
 .sitem .ind{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:0 3px 3px 0;
-  background:var(--ind,var(--game));opacity:0;transition:opacity .2s ease}
+  background:var(--accent);opacity:0;transition:opacity .2s ease}
 .sitem.active .ind{opacity:1}
 /* 折叠态（56px）仅留图标，文字如 WPF 的 Visibility.Collapsed 完全隐藏，悬停展开淡入 */
 .sidebar:not(:hover) .st{opacity:0;pointer-events:none}
@@ -275,10 +672,35 @@ select.input{appearance:none;cursor:pointer;background-image:url("data:image/svg
 .dl-pop .qitem .qp{height:8px;border-radius:4px;background:var(--ctrl-border);overflow:hidden;margin-top:4px}
 .dl-pop .qitem .qp>i{display:block;height:100%;background:var(--accent);width:40%}
 
-.toast{position:absolute;right:16px;bottom:40px;width:330px;background:var(--ctrl);border:1px solid var(--ctrl-border);
-  border-radius:8px;z-index:58;box-shadow:0 14px 36px rgba(0,0,0,.45);overflow:hidden;animation:toastIn .2s ease}
+/* Toast 容器 */
+#toastHost{
+  position:absolute;
+  right:16px;
+  bottom:40px;
+  z-index:80;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:flex-end;
+  pointer-events:none;
+}
+#toastHost>*{pointer-events:auto}
+.window.android #toastHost{bottom:calc(var(--status-h) + 64px + 12px)}
+
+.toast{
+  position:relative;
+  width:330px;
+  background:var(--ctrl);
+  border:1px solid var(--ctrl-border);
+  border-radius:8px;
+  box-shadow:0 14px 36px rgba(0,0,0,.45);
+  overflow:hidden;
+  animation:toastIn .22s ease;
+}
+.toast.leaving{animation:toastOut .22s ease forwards}
 .toast .bar{width:4px;align-self:stretch;background:var(--accent)}
-@keyframes toastIn{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+@keyframes toastIn{from{opacity:0;transform:translateX(110%)}to{opacity:1;transform:translateX(0)}}
+@keyframes toastOut{from{opacity:1;transform:translateX(0)}to{opacity:0;transform:translateX(110%)}}
 .hint{font-size:12px;color:var(--fg2);margin-top:4px}
 .pagehead h2{font-size:19px;font-weight:800}
 .pagehead .pill{font-size:12px;color:var(--fg2);background:var(--ctrl);padding:4px 10px;border-radius:20px;border:1px solid var(--ctrl-border)}
@@ -347,7 +769,6 @@ select.input{appearance:none;cursor:pointer;background-image:url("data:image/svg
       <svg class="dl-ring" viewBox="0 0 34 34"><circle class="track" cx="17" cy="17" r="15"></circle><circle class="bar" cx="17" cy="17" r="15"></circle></svg>
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
     </button>
-    <span class="badge red" style="position:absolute;top:6px;right:8px;min-width:14px;height:14px;border-radius:7px;font-size:9px;display:grid;place-items:center;padding:0 3px">2</span>
 
     <!-- 四色索引贴主标签 -->
     <div class="tabs" id="tabs"></div>
@@ -359,17 +780,23 @@ select.input{appearance:none;cursor:pointer;background-image:url("data:image/svg
     </div>
   </div>
 
-  <!-- ===================== 主体 ===================== -->
-  <div class="body">
-    <div class="sidebar" id="sidebar">
-      <div class="scroll" id="sidebarItems"></div>
-    </div>
+  <!-- ===================== 灵动布局：整页卡片 ===================== -->
+  <div class="page-card" id="pageCard">
+    <!-- 卡片顶部色带：灵动布局下显示并与索引贴同色连接 -->
+    <div class="card-top-band" id="cardBand"></div>
 
-    <div class="content" id="content">
-      <div class="page-tint" id="pageTint"></div>
+    <!-- ===================== 主体 ===================== -->
+    <div class="body" id="cardBody">
+      <div class="sidebar" id="sidebar">
+        <div class="scroll" id="sidebarItems"></div>
+      </div>
 
-      <!-- ===== 游戏页 ===== -->
-      <div class="page active" id="page-game">
+      <div class="content" id="content">
+        <div class="page-tint" id="pageTint"></div>
+        <div class="top-tabs" id="topTabs"></div>
+
+        <!-- ===== 游戏页 ===== -->
+        <div class="page active" id="page-game">
         <div class="pagehead" style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
           <h2>游戏</h2><span class="pill">快速启动</span>
         </div>
@@ -425,7 +852,7 @@ select.input{appearance:none;cursor:pointer;background-image:url("data:image/svg
             <div class="flex" style="justify-content:flex-end;margin-top:8px;gap:8px"><button class="btn sm">安装</button><button class="btn ghost sm">不感兴趣</button></div>
           </div>
           <div class="card hcard" style="width:250px;height:150px">
-            <div class="flex gap8"><b> sodium</b></div>
+            <div class="flex gap8"><b>sodium</b></div>
             <div class="small muted" style="margin-top:6px">极致性能优化，提升帧率。</div>
             <div class="small" style="color:var(--fg);margin-top:6px">当前版本缺少性能模组</div>
             <div class="flex" style="justify-content:flex-end;margin-top:8px;gap:8px"><button class="btn sm">安装</button><button class="btn ghost sm">不感兴趣</button></div>
@@ -455,7 +882,7 @@ select.input{appearance:none;cursor:pointer;background-image:url("data:image/svg
         <div class="grid-cards" id="dlCards"></div>
       </div>
 
-      <!-- ===== 工具箱页（点击侧边栏某项 → 显示对应面板，一次一个） ===== -->
+      <!-- ===== 工具箱页 ===== -->
       <div class="page" id="page-toolbox">
         <div class="pagehead" style="display:flex;align-items:center;gap:12px;margin-bottom:8px">
           <h2>工具箱</h2><span class="pill" id="tbPanelName">日志管理器</span>
@@ -485,6 +912,9 @@ select.input{appearance:none;cursor:pointer;background-image:url("data:image/svg
       <button class="btn sm" style="margin-top:10px" onclick="toast('开始下载队列')">开始下载队列</button>
     </div>
   </div>
+
+  <!-- ===================== 安卓布局：底部四色导航 ===================== -->
+  <div class="bottom-nav" id="bottomNav"></div>
 
   <!-- ===================== 状态栏 ===================== -->
   <div class="statusbar">
@@ -555,7 +985,7 @@ select.input{appearance:none;cursor:pointer;background-image:url("data:image/svg
 </div>
 
 <script>
-/* ============ 图标（按 PngIcon Token 映射，line 风格 24x24） ============ */
+/* ============ 图标 ============ */
 const ICONS = {
   download:'<path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/>',
   mod:'<rect x="4" y="4" width="16" height="16" rx="3"/><path d="M4 9h16M9 4v16"/>',
@@ -589,7 +1019,7 @@ const ICONS = {
 };
 function svg(t,w){return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:${w||18}px;height:${w||18}px">${ICONS[t]||''}</svg>`}
 
-/* ============ 配置（来自 MainTabDefinition / SidebarModel） ============ */
+/* ============ 配置 ============ */
 const TABS = [
   {kind:'Game',     title:'游戏',   color:'var(--game)', active:'var(--game-active)', order:0, hasSidebar:false, always:true},
   {kind:'Download', title:'下载中心',color:'var(--dl)',  active:'var(--dl-active)',  order:1, hasSidebar:true},
@@ -647,34 +1077,197 @@ TABS.forEach((t,i)=>{
   tabsEl.appendChild(el);
 });
 
+/* ============ 底部导航（安卓布局） ============ */
+const bottomNav=document.getElementById('bottomNav');
+const BOTTOM_ICONS={Game:'launch',Download:'download',Toolbox:'mod',Settings:'general'};
+TABS.forEach(t=>{
+  const el=document.createElement('div');
+  el.className='bnav-item';
+  el.dataset.kind=t.kind;
+  el.style.setProperty('--bnav-color',t.color);
+  el.innerHTML=`${svg(BOTTOM_ICONS[t.kind],22)}<span>${t.title}</span>`;
+  el.addEventListener('click',()=>selectTab(t.kind));
+  bottomNav.appendChild(el);
+});
+
 /* ============ 状态 ============ */
 let cur='Game';
+let layout='classic';
 const titlebar=document.getElementById('titlebar');
+const cardBand=document.getElementById('cardBand');
+const pageCard=document.getElementById('pageCard');
 const pageTint=document.getElementById('pageTint');
 const sidebar=document.getElementById('sidebar');
 const sidebarItems=document.getElementById('sidebarItems');
 
 function selectTab(kind){
   if(kind===cur) return;
+  const prev=cur;
   cur=kind;
   const t=TABS.find(x=>x.kind===kind);
-  // 标题栏 / 页面渐隐带随标签变色
-  titlebar.style.background=t.color;
-  pageTint.style.setProperty('--tint',t.color);
-  // 索引贴状态
+  const prevIndex=TABS.findIndex(x=>x.kind===prev);
+  const newIndex=TABS.findIndex(x=>x.kind===kind);
+  const direction=newIndex>prevIndex ? 1 : -1;
+
+  if(layout==='dynamic'){
+    // 一次滚动到位：克隆当前卡片作为新卡片，两张卡片并排同时滚动
+    const nextCard = pageCard.cloneNode(true);
+    nextCard.id = 'pageCardNext';
+    nextCard.classList.add('next', direction===1 ? 'from-right' : 'from-left');
+    win.appendChild(nextCard);
+
+    // 提前设置全局 tint，让新卡片背景立即使用目标索引贴色
+    document.documentElement.style.setProperty('--tint',t.color);
+
+    // 准备新卡片显示目标页面
+    prepCard(nextCard, kind);
+
+    // 标题栏颜色与目标页同步开始变化
+    titlebar.style.background=t.color;
+    cardBand.style.background=t.color;
+
+    // 强制回流以确保初始位置生效
+    nextCard.offsetHeight;
+
+    requestAnimationFrame(()=>{
+      // 旧卡与新卡同时向同一方向平移，形成连续滚动感
+      pageCard.classList.add(direction===1 ? 'slide-left' : 'slide-right');
+      nextCard.classList.remove('from-right','from-left');
+      nextCard.classList.add(direction===1 ? 'slide-left' : 'slide-right');
+    });
+
+    setTimeout(()=>{
+      // 动画结束：在主卡片中切换真正内容
+      switchTabContent(kind,t);
+      titlebar.style.background=t.color;
+      cardBand.style.background=t.color;
+
+      // 清理过渡卡片并重置主卡片
+      pageCard.classList.remove('slide-left','slide-right');
+      nextCard.remove();
+      triggerReveal();
+    }, 120);
+  }else if(layout==='android'){
+    // 安卓布局：内容页水平滑动，底部导航同步高亮
+    const curPage=document.querySelector('.page.active');
+    const nextPage=document.getElementById('page-'+kind.toLowerCase());
+    if(curPage && nextPage){
+      curPage.classList.add(direction===1 ? 'leave-left' : 'leave-right');
+      nextPage.classList.add('active', direction===1 ? 'enter-right' : 'enter-left');
+      nextPage.style.opacity='1';
+      nextPage.style.pointerEvents='auto';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        nextPage.classList.add('enter-done');
+      }));
+      setTimeout(()=>{
+        curPage.classList.remove('active','leave-left','leave-right');
+        nextPage.classList.remove('enter-left','enter-right','enter-done');
+        nextPage.style.opacity='';
+        nextPage.style.pointerEvents='';
+        switchTabContent(kind,t);
+        // 安卓布局标题栏保持透明
+        if(layout!=='android') titlebar.style.background=t.color;
+        triggerReveal();
+      }, 180);
+    }else{
+      switchTabContent(kind,t);
+      if(layout!=='android') titlebar.style.background=t.color;
+      triggerReveal();
+    }
+  }else if(layout==='minimal'){
+    // 简约布局：内容页水平滑动，避免上下标题重叠
+    const curPage=document.querySelector('.page.active');
+    const nextPage=document.getElementById('page-'+kind.toLowerCase());
+    if(curPage && nextPage){
+      curPage.classList.add(direction===1 ? 'leave-left' : 'leave-right');
+      nextPage.classList.add('active', direction===1 ? 'enter-right' : 'enter-left');
+      nextPage.style.opacity='1';
+      nextPage.style.pointerEvents='auto';
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        nextPage.classList.add('enter-done');
+      }));
+      setTimeout(()=>{
+        curPage.classList.remove('active','leave-left','leave-right');
+        nextPage.classList.remove('enter-left','enter-right','enter-done');
+        nextPage.style.opacity='';
+        nextPage.style.pointerEvents='';
+        switchTabContent(kind,t);
+        triggerReveal();
+      }, 180);
+    }else{
+      switchTabContent(kind,t);
+      triggerReveal();
+    }
+  }else{
+    // 经典布局：简洁切换
+    switchTabContent(kind,t);
+    titlebar.style.background=t.color;
+    triggerReveal();
+  }
+}
+
+// 为克隆卡片准备目标页面的视觉状态（标签、页面、侧边栏）
+function prepCard(card, kind){
+  const t=TABS.find(x=>x.kind===kind);
+  card.querySelectorAll('.tab').forEach(el=>{
+    const on=el.dataset.kind===kind;
+    el.classList.toggle('active',on);
+    el.classList.toggle('expanded',on);
+  });
+  card.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  const page=card.querySelector('#page-'+kind.toLowerCase());
+  if(page) page.classList.add('active');
+  const sb=card.querySelector('.sidebar');
+  const sbScroll=card.querySelector('.scroll');
+  if(sbScroll){
+    sbScroll.innerHTML='';
+    const items=SIDEBAR[kind];
+    if(!items){ if(sb) sb.style.display='none'; }
+    else{
+      if(sb){ sb.style.display=''; sb.style.setProperty('--ind',t.color); }
+      if(Array.isArray(items)){
+        items.forEach(it=>sbScroll.appendChild(sideItem(it,kind)));
+      }
+    }
+  }
+}
+
+function switchTabContent(kind,t){
   document.querySelectorAll('.tab').forEach(el=>{
     const on=el.dataset.kind===kind;
     el.classList.toggle('active',on);
     el.classList.toggle('expanded',on);
   });
-  // 页面切换
+  document.querySelectorAll('.bnav-item').forEach(el=>{
+    el.classList.toggle('active', el.dataset.kind===kind);
+  });
+  pageTint.style.setProperty('--tint',t.color);
+  document.documentElement.style.setProperty('--tint',t.color);
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+kind.toLowerCase()).classList.add('active');
-  // 侧边栏
-  buildSidebar(kind);
+  if(layout==='android'){
+    buildTopTabs(kind);
+  }else{
+    buildSidebar(kind);
+  }
   if(kind==='Download') renderDownload();
   if(kind==='Toolbox') renderToolboxPanel(sbSel);
   if(kind==='Settings') renderSettings('general');
+}
+
+function triggerReveal(){
+  document.querySelectorAll('.reveal').forEach(el=>{
+    el.classList.remove('show');
+    el.style.transitionDelay = '';
+  });
+  const activePage=document.querySelector('.page.active');
+  if(!activePage) return;
+  const items=activePage.querySelectorAll('.card, .pagehead, .set-row, .sitem, .dcard, .pbox, .layout-card');
+  items.forEach((el,i)=>{
+    el.classList.add('reveal');
+    el.style.transitionDelay = `${i*25}ms`;
+    requestAnimationFrame(()=>el.classList.add('show'));
+  });
 }
 
 /* ============ 侧边栏 ============ */
@@ -682,7 +1275,6 @@ let sbSel=null;
 function buildSidebar(kind){
   sidebarItems.innerHTML='';
   const items=SIDEBAR[kind];
-  // 游戏页无侧边栏（Sidebar.Has(Game)=false）→ 隐藏整个侧边栏列
   if(!items){ sidebar.style.display='none'; sbSel=null; return; }
   sidebar.style.display='';
   const t=TABS.find(x=>x.kind===kind);
@@ -702,8 +1294,37 @@ function sideItem(it,kind){
 function updateSbSel(){
   document.querySelectorAll('.sitem').forEach(el=>el.classList.toggle('active',el.dataset.id===sbSel));
 }
+
+/* ============ 顶部横向子标签（安卓布局） ============ */
+const topTabs=document.getElementById('topTabs');
+function buildTopTabs(kind){
+  topTabs.innerHTML='';
+  const items=SIDEBAR[kind];
+  const t=TABS.find(x=>x.kind===kind);
+  topTabs.style.setProperty('--ttab-color',t?t.color:'var(--game)');
+  if(!items || !Array.isArray(items)){
+    topTabs.style.display='none';
+    sbSel=null;
+    return;
+  }
+  topTabs.style.display='flex';
+  sbSel=items[0].id;
+  items.forEach(it=>{
+    const el=document.createElement('button');
+    el.className='ttab';
+    el.dataset.id=it.id;
+    el.textContent=it.title;
+    el.addEventListener('click',()=>{sbSel=it.id;updateTopTabs();routeSidebar(kind,it.id);});
+    topTabs.appendChild(el);
+  });
+  updateTopTabs();
+}
+function updateTopTabs(){
+  document.querySelectorAll('.ttab').forEach(el=>el.classList.toggle('active',el.dataset.id===sbSel));
+}
+
 function routeSidebar(kind,id){
-  if(kind==='Download'){ const it=SIDEBAR.Download.find(x=>x.id===id); document.getElementById('dlSub').textContent=it?it.title:'Minecraft'; renderDownload(id); }
+  if(kind==='Download'){ const it=SIDEBAR.Download.find(x=>x.id===id); document.getElementById('dlSub').textContent=it?it.title:''; renderDownload(id); }
   if(kind==='Toolbox'){ renderToolboxPanel(id); }
   if(kind==='Settings'){ renderSettings(id); }
 }
@@ -723,6 +1344,7 @@ function renderDownload(id){
   const sub=id||'minecraft';
   const filters=document.getElementById('dlFilters');
   const cards=document.getElementById('dlCards');
+  const count=document.getElementById('dlCount');
   const fmap={
     minecraft:'<select class="input sm" style="width:160px"><option>全部版本</option><option>正式版</option><option>快照</option><option>旧版</option></select>',
     mod:'<select class="input sm" style="width:140px"><option>1.21.4</option><option>1.20.1</option></select><select class="input sm" style="width:120px"><option>全部加载器</option><option>Fabric</option><option>Forge</option></select>',
@@ -733,6 +1355,7 @@ function renderDownload(id){
   };
   filters.innerHTML=fmap[sub]||'';
   const data = sub==='minecraft' ? MOCK.slice(0,5).map(m=>({...m,t:m.t+' 快照'})) : MOCK;
+  if(count) count.textContent=`共 ${data.length} 个结果`;
   cards.innerHTML=data.map(m=>`
     <div class="dcard">
       <div class="cover">${svg(m.ic,34)}</div>
@@ -749,7 +1372,7 @@ function renderDownload(id){
     </div>`).join('');
 }
 
-/* ============ 工具箱（点侧边栏某项 → 显示对应面板，一次一个） ============ */
+/* ============ 工具箱 ============ */
 function spark(values,color){
   const w=320,h=90,max=Math.max(...values,1),min=Math.min(...values,0),n=values.length,rng=(max-min)||1;
   const pts=values.map((v,i)=>`${(i/(n-1)*w).toFixed(1)},${(h-(v-min)/rng*h).toFixed(1)}`).join(' ');
@@ -1102,12 +1725,68 @@ function renderSettings(id){
       <div class="set-row">${sw(true)}<span>详情页 AI 翻译</span></div>`;
   }else if(id==='appearance'){
     b.innerHTML=`
-      <div class="set-row"><div class="lbl">主题</div><select class="input" style="width:120px"><option>暗色</option><option>亮色</option></select></div>
-      <div class="set-row"><div class="lbl">主题色</div><input class="input" style="width:100px" value="#3B82F6" /><span style="width:24px;height:24px;border-radius:4px;background:#3B82F6;display:inline-block;margin-left:8px"></span></div>
-      <div class="set-row"><div class="lbl">背景图片</div><input class="input" style="width:240px" placeholder="（可选）" /><button class="btn ghost sm">浏览</button></div>
-      <div class="set-row"><div class="lbl">字体缩放</div><input type="range" min="0.8" max="1.5" step="0.1" value="1" style="width:200px" /><span style="margin-left:8px">1.0x</span></div>
-      <div class="set-row">${sw(true)}<span>高 DPI 适配</span></div>
-      <div class="set-row">${sw(false)}<span>显示控件边框</span></div>`;
+      <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:10px;margin-bottom:16px">
+        <div class="lbl">界面布局</div>
+        <div class="layout-options" style="display:flex;gap:12px;flex-wrap:wrap;width:100%">
+          <div class="layout-card" style="flex:1;min-width:140px;max-width:170px;border:1px solid var(--ctrl-border);border-radius:10px;padding:10px;background:var(--ctrl);display:flex;flex-direction:column;gap:8px">
+            <div class="layout-preview" style="height:90px;border-radius:8px;background:var(--win);border:1px solid var(--ctrl-border);position:relative;overflow:hidden">
+              <div style="position:absolute;top:0;left:0;right:0;height:10px;background:var(--game)"></div>
+              <div style="position:absolute;top:10px;left:0;bottom:0;width:16px;background:var(--ctrl-border)"></div>
+              <div style="position:absolute;inset:16px 8px 8px 24px;background:var(--ctrl);border-radius:4px"></div>
+            </div>
+            <div style="font-weight:700;font-size:13px;text-align:center;color:var(--fg)">经典布局</div>
+            <button class="btn" style="width:100%" onclick="setLayout('classic')">使用中</button>
+          </div>
+          <div class="layout-card" style="flex:1;min-width:140px;max-width:170px;border:1px solid var(--ctrl-border);border-radius:10px;padding:10px;background:var(--ctrl);display:flex;flex-direction:column;gap:8px">
+            <div class="layout-preview" style="height:90px;border-radius:16px;background:var(--win);border:1px solid var(--ctrl-border);position:relative;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,.25)">
+              <div style="position:absolute;top:8px;left:8px;right:8px;height:8px;background:var(--tool);border-radius:8px"></div>
+              <div style="position:absolute;top:24px;left:20px;right:20px;bottom:20px;background:var(--ctrl);border-radius:12px"></div>
+              <div style="position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:24px;height:4px;background:var(--fg2);border-radius:2px"></div>
+            </div>
+            <div style="font-weight:700;font-size:13px;text-align:center;color:var(--fg)">灵动布局</div>
+            <button class="btn" style="width:100%" onclick="setLayout('dynamic')">选择</button>
+          </div>
+          <div class="layout-card" style="flex:1;min-width:140px;max-width:170px;border:1px solid var(--ctrl-border);border-radius:10px;padding:10px;background:var(--ctrl);display:flex;flex-direction:column;gap:8px">
+            <div class="layout-preview" style="height:90px;border-radius:10px;background:var(--win);border:1px solid var(--ctrl-border);position:relative;overflow:hidden">
+              <div style="position:absolute;inset:8px;background:var(--ctrl);border-radius:6px"></div>
+              <div style="position:absolute;left:0;right:0;bottom:0;height:18px;background:var(--ctrl-border);display:flex;align-items:center;justify-content:center;gap:4px">
+                <span style="width:14px;height:3px;background:var(--fg2);border-radius:2px"></span>
+                <span style="width:14px;height:3px;background:var(--fg2);border-radius:2px"></span>
+                <span style="width:14px;height:3px;background:var(--tool);border-radius:2px"></span>
+              </div>
+            </div>
+            <div style="font-weight:700;font-size:13px;text-align:center;color:var(--fg)">安卓布局</div>
+            <button class="btn" style="width:100%" onclick="setLayout('android')">选择</button>
+          </div>
+          <div class="layout-card" style="flex:1;min-width:140px;max-width:170px;border:1px solid var(--ctrl-border);border-radius:10px;padding:10px;background:var(--ctrl);display:flex;flex-direction:column;gap:8px">
+            <div class="layout-preview" style="height:90px;border-radius:6px;background:var(--win);border:1px solid var(--ctrl-border);position:relative;overflow:hidden">
+              <div style="position:absolute;top:8px;left:8px;right:8px;height:4px;background:var(--ctrl-border);border-radius:2px"></div>
+              <div style="position:absolute;top:20px;left:8px;right:8px;bottom:8px;background:var(--ctrl);border-radius:4px"></div>
+            </div>
+            <div style="font-weight:700;font-size:13px;text-align:center;color:var(--fg)">简约布局</div>
+            <button class="btn" style="width:100%" onclick="setLayout('minimal')">选择</button>
+          </div>
+        </div>
+      </div>
+      <div class="set-row" style="flex-direction:column;align-items:flex-start;gap:10px;margin-bottom:16px">
+        <div class="lbl">主题色</div>
+        <div class="theme-options" id="themeOptions" style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="theme-dot" data-color="#3B82F6" style="--c:#3B82F6" title="默认蓝" onclick="setThemeColor('#3B82F6')"></button>
+          <button class="theme-dot" data-color="#10B981" style="--c:#10B981" title="薄荷绿" onclick="setThemeColor('#10B981')"></button>
+          <button class="theme-dot" data-color="#8B5CF6" style="--c:#8B5CF6" title="紫罗兰" onclick="setThemeColor('#8B5CF6')"></button>
+          <button class="theme-dot" data-color="#EC4899" style="--c:#EC4899" title="粉红" onclick="setThemeColor('#EC4899')"></button>
+          <button class="theme-dot" data-color="#F59E0B" style="--c:#F59E0B" title="琥珀橙" onclick="setThemeColor('#F59E0B')"></button>
+          <button class="theme-dot" data-color="#EF4444" style="--c:#EF4444" title="活力红" onclick="setThemeColor('#EF4444')"></button>
+          <button class="theme-dot" data-color="#06B6D4" style="--c:#06B6D4" title="青色" onclick="setThemeColor('#06B6D4')"></button>
+          <button class="theme-dot" data-color="#EAB308" style="--c:#EAB308" title="柠檬黄" onclick="setThemeColor('#EAB308')"></button>
+        </div>
+      </div>
+      <div class="set-row"><div class="lbl">主题模式</div><select class="input" style="width:120px"><option>跟随系统</option><option>深色</option><option>浅色</option></select></div>
+      <div class="set-row"><div class="lbl">窗口背景色</div><input class="input" style="width:100px" value="#0F1115" /><span style="width:24px;height:24px;border-radius:4px;background:#0F1115;display:inline-block;margin-left:8px"></span></div>
+      <div class="set-row"><div class="lbl">背景图片</div><input class="input" style="width:240px" placeholder="选择图片路径" /><button class="btn ghost sm">浏览</button></div>
+      <div class="set-row"><div class="lbl">界面缩放</div><input type="range" min="0.8" max="1.5" step="0.1" value="1" style="width:200px" /><span style="margin-left:8px">100%</span></div>
+      <div class="set-row">${sw(true)}<span>显示毛玻璃效果</span></div>
+      <div class="set-row">${sw(false)}<span>隐藏侧边栏图标标签</span></div>`;
   }else if(id==='about'){
     b.innerHTML=`
       <div class="set-row"><span>版本</span><b>Chert Launcher v2.5.6（公测）</b></div>
@@ -1123,8 +1802,8 @@ function showModal(m){document.getElementById('overlay').classList.add('show');
 function hideModal(){document.getElementById('overlay').classList.remove('show');}
 document.getElementById('overlay').addEventListener('click',e=>{if(e.target.id==='overlay')hideModal();});
 function toast(msg){const h=document.getElementById('toastHost');const t=document.createElement('div');
-  t.className='toast';t.innerHTML=`<div class="flex" style="align-items:stretch"><span class="bar"></span><div style="padding:10px 12px;flex:1"><b style="font-size:13px">提示</b><div class="small muted" style="margin-top:3px">${msg}</div></div><button onclick="this.parentNode.parentNode.remove()" style="background:transparent;border:none;color:var(--fg2);cursor:pointer;padding:6px">✕</button></div>`;
-  h.appendChild(t);setTimeout(()=>{t.style.transition='opacity .3s';t.style.opacity='0';setTimeout(()=>t.remove(),300);},4000);}
+  t.className='toast';t.innerHTML=`<div class="flex" style="align-items:stretch"><span class="bar"></span><div style="padding:10px 12px;flex:1"><b style="font-size:13px">提示</b><div class="small muted" style="margin-top:3px">${msg}</div></div><button onclick="const p=this.parentNode.parentNode;p.classList.add('leaving');setTimeout(()=>p.remove(),220);" style="background:transparent;border:none;color:var(--fg2);cursor:pointer;padding:6px">✕</button></div>`;
+  h.appendChild(t);setTimeout(()=>{t.classList.add('leaving');setTimeout(()=>t.remove(),220);},4000);}
 
 /* ============ 下载队列弹窗 ============ */
 document.getElementById('dlBtn').addEventListener('click',()=>document.getElementById('dlPop').classList.toggle('show'));
@@ -1133,6 +1812,77 @@ document.getElementById('dlBtn').addEventListener('click',()=>document.getElemen
 document.getElementById('globalSearch').addEventListener('keydown',e=>{
   if(e.key==='Enter'){const v=e.target.value.trim();if(v){selectTab('Download');document.getElementById('dlSearch').value=v;toast('已跳转到下载中心：'+v);}}
 });
+
+/* ============ 主题色切换 ============ */
+function setThemeColor(color){
+  document.documentElement.style.setProperty('--accent',color);
+  // 计算略深的悬停色
+  const r=parseInt(color.slice(1,3),16),g=parseInt(color.slice(3,5),16),b=parseInt(color.slice(5,7),16);
+  const hover=`rgb(${Math.max(0,r-25)},${Math.max(0,g-25)},${Math.max(0,b-25)})`;
+  document.documentElement.style.setProperty('--accent-hover',hover);
+  document.querySelectorAll('.theme-dot').forEach(el=>{
+    el.classList.toggle('active',el.dataset.color.toLowerCase()===color.toLowerCase());
+  });
+  try{ localStorage.setItem('chert-theme-color',color); }catch(e){}
+  toast('主题色已更新');
+}
+
+/* ============ 布局切换 ============ */
+function setLayout(name){
+  layout=name;
+  const win=document.getElementById('win');
+  const t=TABS.find(x=>x.kind===cur);
+  win.classList.remove('classic','dynamic','android','minimal');
+  win.classList.add(name);
+
+  // 清理安卓布局残留的页面动画状态与顶部子标签，防止重叠到其他模式
+  document.querySelectorAll('.page').forEach(p=>{
+    p.classList.remove('leave-left','leave-right','enter-left','enter-right','enter-done');
+    p.style.opacity='';
+    p.style.pointerEvents='';
+  });
+
+  if(name==='dynamic'){
+    cardBand.style.background=t?t.color:'var(--game)';
+    document.documentElement.style.setProperty('--tint',t?t.color:'var(--game)');
+    titlebar.style.background='';
+    topTabs.style.display='none';
+    pageCard.classList.remove('slide-left','slide-right','from-right','from-left');
+    pageCard.classList.add('from-right');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      pageCard.classList.remove('from-right');
+    }));
+  }else if(name==='android'){
+    cardBand.style.background='';
+    document.documentElement.style.setProperty('--tint',t?t.color:'var(--game)');
+    titlebar.style.background='';
+    // 同步底部导航、顶部子标签等状态
+    switchTabContent(cur,t);
+  }else if(name==='minimal'){
+    // 简约布局：终端式毛玻璃，标题栏背景由 CSS 控制，不随页面变色
+    cardBand.style.background='';
+    document.documentElement.style.setProperty('--tint',t?t.color:'var(--game)');
+    titlebar.style.background='';
+    topTabs.style.display='none';
+    pageCard.classList.remove('slide-left','slide-right','from-right','from-left');
+    buildSidebar(cur);
+  }else{
+    // classic
+    cardBand.style.background='';
+    document.documentElement.style.setProperty('--tint',t?t.color:'var(--game)');
+    titlebar.style.background=t?t.color:'var(--game)';
+    topTabs.style.display='none';
+    pageCard.classList.remove('slide-left','slide-right','from-right','from-left');
+    buildSidebar(cur);
+  }
+  toast(name==='dynamic'?'已切换到灵动布局':(name==='classic'?'已切换到经典布局':(name==='android'?'已切换到安卓布局':'已切换到简约布局')));
+
+  // 更新设置页中布局选择按钮的“使用中”状态
+  document.querySelectorAll('.layout-card button').forEach(btn=>{
+    const isCurrent = btn.getAttribute('onclick') && btn.getAttribute('onclick').includes(`setLayout('${name}')`);
+    btn.textContent = isCurrent ? '使用中' : '选择';
+  });
+}
 
 /* ============ 窗口控制（演示） ============ */
 document.getElementById('btnClose').addEventListener('click',()=>toast('演示：关闭窗口'));
@@ -1143,16 +1893,21 @@ document.getElementById('btnMax').addEventListener('click',()=>{max=!max;
 document.getElementById('btnMin').addEventListener('click',()=>toast('演示：最小化到托盘'));
 
 /* ============ 初始化 ============ */
-// 首屏：游戏页为当前选中（索引贴高亮 + 细线 + 标题栏/页面渐隐带取游戏绿）
 document.querySelector('.tab[data-kind="Game"]').classList.add('active');
-titlebar.style.background='var(--game)';
 pageTint.style.setProperty('--tint','var(--game)');
+document.documentElement.style.setProperty('--tint','var(--game)');
+win.classList.add('classic');
 buildSidebar('Game');
-// 支持 URL hash 直达某页（#download / #toolbox / #settings），便于展示
+titlebar.style.background='var(--game)';
+
+// 读取/应用保存的主题色
+const savedTheme=typeof localStorage!=='undefined'?localStorage.getItem('chert-theme-color'):null;
+if(savedTheme) setThemeColor(savedTheme);
+
+triggerReveal();
 const h=(location.hash||'').replace('#','').toLowerCase();
 const map={download:'Download',toolbox:'Toolbox',settings:'Settings'};
 if(map[h]) selectTab(map[h]);
-// 工具箱面板直达：#toolbox-<面板id>（如 #toolbox-perf / #toolbox-aichat）
 else if(h.indexOf('toolbox-')===0){
   selectTab('Toolbox');
   const pid=h.slice(8);
