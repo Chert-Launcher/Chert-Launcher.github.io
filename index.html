@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0a0c10" />
-  <title>燧石启动器 Chert Launcher — 双端同源的 Minecraft 启动器（稳定版 2.6.0）</title>
-  <meta name="description" content="燧石启动器（Chert Launcher）由 RLRS Studio 出品，Windows / Linux 共用核心、内置自动更新；Android 采用独立 Kotlin 重写。当前稳定版 2.6.0，提供 GUI/CLI 自包含与轻量共六种安装包。" />
+  <title>燧石启动器 Chert Launcher — 双端同源的 Minecraft 启动器（稳定版 2.5.6）</title>
+  <meta name="description" content="燧石启动器（Chert Launcher）由 RLRS Studio 出品，Windows / Linux 共用核心、内置自动更新；Android 采用独立 Kotlin 重写。当前稳定版 2.5.6，提供自包含与轻量两种 Windows 安装包。" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -13,8 +13,15 @@
   <meta property="og:site_name" content="RLRS Studio" />
   <meta property="og:type" content="website" />
   <meta property="og:title" content="燧石启动器 Chert Launcher" />
-  <meta property="og:description" content="双端同源的 Minecraft 启动器，当前稳定版 2.6.0。" />
+  <meta property="og:description" content="双端同源的 Minecraft 启动器，当前稳定版 2.5.6。" />
   <meta property="og:url" content="https://chert-launcher.github.io/" />
+
+  <style>
+    .dl-mirror{display:block;margin-top:8px;text-align:center;font-size:12.5px;color:var(--text-2);
+      text-decoration:none;opacity:.85;transition:color .15s,opacity .15s}
+    .dl-mirror:hover{color:var(--accent);opacity:1}
+    .dl-card .btn-primary{margin-top:14px}
+  </style>
 </head>
 <body data-nav="home">
   <div class="bg-aurora"><i></i><i></i><i></i></div>
@@ -41,16 +48,16 @@
 
     <section class="hero"><div class="container hero-grid">
       <div>
-        <span class="eyebrow"><span class="dot"></span>稳定版 · 2.6.0 · 2026-10-11</span>
+        <span class="eyebrow"><span class="dot"></span>稳定版 · 2.5.6 · 2026-09-13</span>
         <h1>双端同源的<br><span class="accent">Minecraft 启动器</span></h1>
         <p class="lead">燧石启动器（Chert Launcher）由 RLRS Studio 出品。Windows / Linux 共用同一套核心，开箱即用、内置自动更新；Android 采用独立的 Kotlin 重写，正在开发中。</p>
         <div class="hero-cta">
-          <a href="#download" class="btn btn-primary btn-lg">⬇ 下载稳定版 2.6.0</a>
+          <a href="#download" class="btn btn-primary btn-lg">⬇ 下载稳定版 2.5.6</a>
           <a href="/preview.html" class="btn btn-ghost btn-lg">界面预览</a>
         </div>
         <div class="hero-meta">
-          <div><b>2.6.0</b><span>当前稳定版</span></div>
-          <div><b>125 MB</b><span>自包含合体</span></div>
+          <div><b>2.5.6</b><span>当前稳定版</span></div>
+          <div><b>111 MB</b><span>自包含合体</span></div>
           <div><b>自动</b><span>内置更新</span></div>
         </div>
       </div>
@@ -68,49 +75,23 @@
     </div></section>
 
     <section id="download" class="section alt"><div class="container">
-      <div class="section-head"><span class="kicker">DOWNLOAD</span><h2>下载 2.6.0（稳定版）</h2><p>所有安装包均从 CNB Release 直链分发（镜像至 GitHub Release），绿色无捆绑。自包含版内置 .NET 10 运行时，双击即跑；轻量版需目标机已安装 .NET 10 桌面运行时。</p></div>
+      <div class="section-head"><span class="kicker">DOWNLOAD</span><h2>下载 2.5.6（稳定版）</h2><p>当前稳定版 2.5.6，提供自包含与轻量两种 Windows 安装包，均从 CNB Release 直链分发（镜像至 GitHub Release），绿色无捆绑。自包含版内置 .NET 10 运行时，双击即跑；轻量版需目标机已安装 .NET 10 桌面运行时。</p></div>
       <div class="dl-grid">
         <div class="dl-card">
           <h3>自包含合体</h3>
           <span class="tag">推荐 · 双击即跑</span>
           <p>GUI（Chert Launcher）+ CLI（chert）全部内置 .NET 10 运行时，零依赖，适合绝大多数用户。</p>
-          <span class="dl-meta">Chert-Launcher-2.6.0-win-x64.zip</span>
-          <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/Chert-Launcher-2.6.0-win-x64.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
+          <span class="dl-meta">Chert-Launcher-2.5.6-win-x64.zip</span>
+          <a href="https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.5.6/Chert-Launcher-2.5.6-win-x64.zip" data-gh="https://github.com/BingJian-REMIX/Chert-WPF/releases/tag/v2.5.6" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载（CNB）</a>
+          <a class="dl-mirror" href="https://github.com/BingJian-REMIX/Chert-WPF/releases/tag/v2.5.6" target="_blank" rel="noopener">或 GitHub 镜像 ↗</a>
         </div>
         <div class="dl-card">
           <h3>轻量合体</h3>
           <span class="tag">需 .NET 10 运行时</span>
-          <p>GUI + CLI 合体，但共享框架依赖，体积仅约 2.7 MB。需目标机已安装 .NET 10 桌面运行时。</p>
-          <span class="dl-meta">Chert-Light-2.6.0-win-x64.zip</span>
-          <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/Chert-Light-2.6.0-win-x64.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
-        </div>
-        <div class="dl-card">
-          <h3>仅 GUI 自包含</h3>
-          <span class="tag">图形界面</span>
-          <p>只含图形界面（Chert Launcher），自包含运行时、双击即跑。不需要命令行的用户可少下载约 44% 体积。</p>
-          <span class="dl-meta">Chert-Launcher-2.6.0-win-x64-gui.zip</span>
-          <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/Chert-Launcher-2.6.0-win-x64-gui.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
-        </div>
-        <div class="dl-card">
-          <h3>仅 CLI 自包含</h3>
-          <span class="tag">命令行</span>
-          <p>只含 chert 命令行工具，自包含运行时，适合服务器与脚本化场景。</p>
-          <span class="dl-meta">chert-cli-2.6.0-win-x64.zip</span>
-          <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/chert-cli-2.6.0-win-x64.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
-        </div>
-        <div class="dl-card">
-          <h3>仅 GUI 轻量</h3>
-          <span class="tag">需 .NET 10 运行时</span>
-          <p>只含图形界面（Chert Launcher）的轻量版，体积更小；需目标机已安装 .NET 10 桌面运行时。</p>
-          <span class="dl-meta">Chert-Light-2.6.0-win-x64-gui.zip</span>
-          <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/Chert-Light-2.6.0-win-x64-gui.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
-        </div>
-        <div class="dl-card">
-          <h3>仅 CLI 轻量</h3>
-          <span class="tag">需 .NET 10 运行时</span>
-          <p>只含 chert 命令行工具的轻量版，适合服务器与脚本化场景；需目标机已安装 .NET 10 运行时。</p>
-          <span class="dl-meta">chert-cli-light-2.6.0-win-x64.zip</span>
-          <a href="https://github.com/BingJian-REMIX/Chert-WPF/releases/download/v2.6.0/chert-cli-light-2.6.0-win-x64.zip" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载</a>
+          <p>GUI + CLI 合体，但共享框架依赖，体积仅约 1 MB。需目标机已安装 .NET 10 桌面运行时。</p>
+          <span class="dl-meta">Chert-Light-2.5.6-win-x64.zip</span>
+          <a href="https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.5.6/Chert-Light-2.5.6-win-x64.zip" data-gh="https://github.com/BingJian-REMIX/Chert-WPF/releases/tag/v2.5.6" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载（CNB）</a>
+          <a class="dl-mirror" href="https://github.com/BingJian-REMIX/Chert-WPF/releases/tag/v2.5.6" target="_blank" rel="noopener">或 GitHub 镜像 ↗</a>
         </div>
       </div>
       <p style="margin-top:22px;color:var(--text-2);font-size:14px;line-height:1.8">
@@ -131,18 +112,28 @@
     </div></section>
 
     <section id="changelog" class="section alt"><div class="container">
-      <div class="section-head"><span class="kicker">CHANGELOG</span><h2>更新日志 · 2.6.0</h2></div>
+      <div class="section-head"><span class="kicker">CHANGELOG</span><h2>更新日志 · 2.5.6（稳定版）</h2></div>
       <div class="log-entry">
-        <h3>2.6.0（正式版）<time>2026-10-11</time><span class="badge">stable</span></h3>
-        <div class="notes">双端同源的核心重构，并带来一批体验优化。
+        <h3>2.5.6（稳定版）<time>2026-09-13</time><span class="badge">stable</span></h3>
+        <div class="notes">2.5.6（稳定版）发布于 2026-09-13，主要更新如下。
 
-【通知与界面】
-· 安卓布局（UiStyle=android）下的 Toast 改为安卓式通知卡片：顶部显示品牌图标 +「燧石启动器」应用名 + 相对时间戳（1 分钟内显示「刚刚」），其余布局外观不变。Windows / Linux 同构实现。
-· 更新弹窗与下载流程梳理，分离 GUI / CLI 安装包（GUI 用户可少下载约 44% 体积）。
+【界面与体验】
+· AFK 添加动作支持弹窗选择全部动作类型
+· 皮肤编辑器 3D 预览重打光修正
+· 性能页改为多块实时折线图
+· 下载队列按钮无框无底（保留环形进度）
+· 标题栏新增最大化按钮
 
-【平台与分发】
-· Windows / Linux 同步至 2.6.0；安装包从 CNB Release 直链分发（同时镜像至 GitHub Release），内置自动更新读取本页 latest.json。
-· 六个包：GUI+CLI 合体自包含、GUI+CLI 合体轻量、仅 GUI 自包含、仅 CLI 自包含、仅 GUI 轻量、仅 CLI 轻量。轻量版需目标机已安装 .NET 10 桌面运行时。</div>
+【功能与设置】
+· 工具箱移除版本列表 / 版本设置入口
+· 游戏页快速启动仅保留版本库
+· 版本设置页重设计为分区卡片
+· 暗色主题补全控件前景色
+· 添加同名游戏名提示、实时提示统一右下角 toast
+· 音乐播放器页滚动与删除按钮修正
+
+【分发】
+· 新增轻量版 Chert-Light：framework-dependent 单文件，体积约 1 MB，需目标机已安装 .NET 10 桌面运行时；自包含版 Chert-Launcher 仍保持双击即跑、零依赖。</div>
       </div>
     </div></section>
   </main>
@@ -160,6 +151,29 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+  <script>
+  // #178 下载源策略：默认 CNB 直链；cnb 不可达/404 时自动换源 GitHub 镜像。
+  // 由于 cnb 当前未开放 CORS，浏览器无法直接读取其 404 状态，故：
+  //  - 主按钮默认指向 CNB（满足“默认下载链对 cnb”）；
+  //  - 每张卡片提供“或 GitHub 镜像”链接作为始终可用的兜底（满足“cnb404 换源 github”）；
+  //  - 若未来 cnb 放开 CORS，下面的探测会在明确读到非 2xx 时自动把主按钮切到 GitHub。
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('a[data-gh]'));
+    if (!links.length) return;
+    var probe = links[0].getAttribute('href');
+    fetch(probe, { method: 'HEAD' })
+      .then(function (r) {
+        if (!r.ok) {
+          links.forEach(function (a) {
+            a.href = a.getAttribute('data-gh');
+            a.textContent = '⬇ 下载（GitHub）';
+          });
+        }
+      })
+      .catch(function () { /* CORS/网络被拦截：保持 CNB 默认，由可见镜像链接兜底 */ });
+  })();
   </script>
 </body>
 </html>
