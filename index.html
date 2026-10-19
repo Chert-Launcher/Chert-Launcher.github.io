@@ -4,21 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#0a0c10" />
-  <title>燧石启动器 Chert Launcher — 双端同源的 Minecraft 启动器（稳定版 2.5.6）</title>
-  <meta name="description" content="燧石启动器（Chert Launcher）由 RLRS Studio 出品，Windows / Linux 共用核心、内置自动更新；Android 采用独立 Kotlin 重写。当前稳定版 2.5.6，提供自包含与轻量两种 Windows 安装包。" />
+  <title>燧石启动器 Chert Launcher — 重新定义 Minecraft 启动体验</title>
+  <meta name="description" content="燧石启动器（Chert Launcher）由 RLRS Studio 出品。自带 P2P 打洞联机、自愈 HUD、3D 皮肤渲染与四套独立 UI 的硬核 Minecraft 启动器。" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="stylesheet" href="/css/style.css" />
-  <meta property="og:site_name" content="RLRS Studio" />
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="燧石启动器 Chert Launcher" />
-  <meta property="og:description" content="双端同源的 Minecraft 启动器，当前稳定版 2.5.6。" />
-  <meta property="og:url" content="https://chert-launcher.github.io/" />
-
   <style>
-    .dl-mirror{display:block;margin-top:8px;text-align:center;font-size:12.5px;color:var(--text-2);
-      text-decoration:none;opacity:.85;transition:color .15s,opacity .15s}
+    /* 数据看板 */
+    .stats-row { display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; padding: 30px 20px; border-bottom: 1px solid var(--border); background: rgba(255, 255, 255, 0.02); margin-bottom: 40px; }
+    .stat-item { text-align: center; }
+    .stat-item .num { font-size: 36px; font-weight: 800; color: var(--accent); line-height: 1.2; }
+    .stat-item .label { font-size: 13px; color: var(--muted); margin-top: 4px; }
+    
+    /* Bento Grid */
+    .bento-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 20px; }
+    .bento-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; display: flex; flex-direction: column; position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s; }
+    .bento-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+    .bento-card .ico { width: 40px; height: 40px; border-radius: 10px; background: rgba(33, 150, 243, 0.1); color: var(--accent); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .bento-card h3 { font-size: 18px; margin-bottom: 8px; font-weight: 700; }
+    .bento-card p { font-size: 14px; color: var(--text-2); line-height: 1.6; margin-bottom: 16px; flex-grow: 1; }
+    .bento-card .tags { margin-top: auto; display: flex; flex-wrap: wrap; gap: 6px; }
+    .bento-card .tags span { font-size: 11px; padding: 2px 8px; background: rgba(255, 255, 255, 0.05); border-radius: 4px; color: var(--muted); }
+    .bento-card.wide { grid-column: span 2; }
+    @media (max-width: 900px) { .bento-grid { grid-template-columns: 1fr; } .bento-card.wide { grid-column: span 1; } }
+
+    /* 时间线 */
+    .timeline { position: relative; max-width: 800px; margin: 40px auto 0; padding-left: 30px; border-left: 2px solid var(--border); }
+    .timeline-item { position: relative; margin-bottom: 24px; }
+    .timeline-item::before { content: ""; position: absolute; left: -36px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 10px var(--accent); }
+    .timeline-item .date { font-size: 12px; color: var(--accent); font-family: var(--mono); margin-bottom: 4px; }
+    .timeline-item h4 { margin: 0 0 6px; font-size: 15px; color: var(--text); }
+    .timeline-item p { margin: 0; font-size: 13px; color: var(--muted); }
+
+    .dl-mirror{display:block;margin-top:8px;text-align:center;font-size:12.5px;color:var(--text-2);text-decoration:none;opacity:.85;transition:color .15s,opacity .15s}
     .dl-mirror:hover{color:var(--accent);opacity:1}
     .dl-card .btn-primary{margin-top:14px}
   </style>
@@ -26,6 +44,7 @@
 <body data-nav="home">
   <div class="bg-aurora"><i></i><i></i><i></i></div>
   <div class="bg-grid"></div>
+  
   <main class="page">
     <header class="nav">
       <div class="container nav-inner">
@@ -36,8 +55,8 @@
         <nav class="nav-links">
           <a href="#download">下载</a>
           <a href="/preview.html">界面预览</a>
-          <a href="#features">特性</a>
-          <a href="#changelog">更新日志</a>
+          <a href="#features">硬核特性</a>
+          <a href="#timeline">开发足迹</a>
           <a href="https://github.com/BingJian-REMIX/Chert-WPF" target="_blank" rel="noopener">GitHub</a>
         </nav>
         <div class="nav-right">
@@ -49,16 +68,11 @@
     <section class="hero"><div class="container hero-grid">
       <div>
         <span class="eyebrow"><span class="dot"></span>稳定版 · 2.5.6 · 2026-09-13</span>
-        <h1>双端同源的<br><span class="accent">Minecraft 启动器</span></h1>
-        <p class="lead">燧石启动器（Chert Launcher）由 RLRS Studio 出品。Windows / Linux 共用同一套核心，开箱即用、内置自动更新；Android 采用独立的 Kotlin 重写，正在开发中。</p>
+        <h1>重新定义<br><span class="accent">Minecraft 启动体验</span></h1>
+        <p class="lead">燧石启动器（Chert Launcher）由 RLRS Studio 出品。它不只是启动器，更是自带 P2P 联机、自愈 HUD、3D 皮肤渲染与四套独立 UI 的终极游戏终端。</p>
         <div class="hero-cta">
           <a href="#download" class="btn btn-primary btn-lg">⬇ 下载稳定版 2.5.6</a>
           <a href="/preview.html" class="btn btn-ghost btn-lg">界面预览</a>
-        </div>
-        <div class="hero-meta">
-          <div><b>2.5.6</b><span>当前稳定版</span></div>
-          <div><b>111 MB</b><span>自包含合体</span></div>
-          <div><b>自动</b><span>内置更新</span></div>
         </div>
       </div>
       <div class="window">
@@ -74,13 +88,101 @@
       </div>
     </div></section>
 
-    <section id="download" class="section alt"><div class="container">
-      <div class="section-head"><span class="kicker">DOWNLOAD</span><h2>下载 2.5.6（稳定版）</h2><p>当前稳定版 2.5.6，提供自包含与轻量两种 Windows 安装包，均从 CNB Release 直链分发（镜像至 GitHub Release），绿色无捆绑。自包含版内置 .NET 10 运行时，双击即跑；轻量版需目标机已安装 .NET 10 桌面运行时。</p></div>
+    <div class="stats-row">
+      <div class="stat-item"><div class="num">300+</div><div class="label">严苛开发提交</div></div>
+      <div class="stat-item"><div class="num">14.9亿</div><div class="label">AI Token 调优</div></div>
+      <div class="stat-item"><div class="num">4</div><div class="label">独立 UI 设计语言</div></div>
+      <div class="stat-item"><div class="num">6</div><div class="label">Windows 分发形态</div></div>
+    </div>
+
+    <section id="features" class="section"><div class="container">
+      <div class="section-head">
+        <span class="kicker">HARDCORE FEATURES</span>
+        <h2>为什么选择燧石启动器？</h2>
+        <p>从底层网络打洞到像素级 UI 打磨，把「装游戏、修崩溃、管 Mod、调 HUD、联机」收进同一个界面。</p>
+      </div>
+
+      <div class="bento-grid">
+        <div class="bento-card wide">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+          <h3>硬核 P2P 联机与快捷组网</h3>
+          <p>自研 UDP 打洞与 STUN NAT 行为判定，无需公网服务器。更有<strong>「服务器快捷加入」</strong>功能：复用运行中实例，通过 <code>/connect</code> 指令与窗口置顶直接拉人。支持断链检测、不换码重连，打洞失败智能降级。</p>
+          <div class="tags"><span>STUN / UDP 打洞</span><span>/connect 快捷加入</span><span>断线不换码</span></div>
+        </div>
+
+        <div class="bento-card wide">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <h3>不死鸟级 HUD 与多开管理</h3>
+          <p>独立窗口实时显示 FPS / 内存 / CPU。独有<strong>「1s 定时自愈重绑」</strong>与跨进程扫描偏移修正，游戏进程退出或丢失瞬间自动找回。支持多开挂机，<strong>多开时绝不提前释放游戏进程</strong>，后台稳如泰山。</p>
+          <div class="tags"><span>HUD 自愈重绑</span><span>多开进程锁定</span><span>跨进程抓取</span></div>
+        </div>
+
+        <div class="bento-card">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3>黑匣子崩溃自愈</h3>
+          <p>自动识别异常，非破坏性修复内存与缺失库。异常时能提取聊天记录，导出为染色 TXT/MD 报告。</p>
+          <div class="tags"><span>聊天记录导出</span><span>染色报告</span></div>
+        </div>
+
+        <div class="bento-card">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div>
+          <h3>“老中医”级 Java 兼容</h3>
+          <p>彻底解决旧版 Forge 与原版的崩溃噩梦。自动识别高版本拦截，精准静默下载 Java 8。修复 <code>inheritsFrom</code> 前置缺失导致的退出码 1。</p>
+          <div class="tags"><span>Java 8/21 自动匹配</span><span>前置补全</span></div>
+        </div>
+
+        <div class="bento-card">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div>
+          <h3>发烧级音乐引擎</h3>
+          <p>聚合六大音源。自带专业 LRC 引擎（二分查找 + 时间偏移修正）。进游戏自动调低音量，剔除所有反人类交互。</p>
+          <div class="tags"><span>歌词精准对齐</span><span>音量联动</span></div>
+        </div>
+
+        <div class="bento-card">
+          <div class="ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg></div>
+          <h3>四套独立 UI 语言</h3>
+          <p>底层重构标准、安卓、毛玻璃（Glass）、动态四套布局。摒弃反人类 Checkbox，全量替换丝滑 Toggle 开关。</p>
+          <div class="tags"><span>真毛玻璃特效</span><span>系统级跟随</span></div>
+        </div>
+      </div>
+    </div></section>
+
+    <section id="timeline" class="section alt"><div class="container">
+      <div class="section-head">
+        <span class="kicker">DEV LOG</span>
+        <h2>那些死磕到底的细节</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="date">2026-09-10</div>
+          <h4>死磕 3D 渲染</h4>
+          <p>修复皮肤 180 度旋转与纹理上移，重写底层 ImageBrush ViewportUnits。</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">2026-09-13</div>
+          <h4>品牌重生：燧石启动器</h4>
+          <p>全面废弃旧称，重构底层代码与图标资源，Chert 正式诞生。</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">2026-09-20</div>
+          <h4>老中医级兼容修复</h4>
+          <p>解决旧版 Forge 精确匹配 Java 8 问题，彻底告别退出码 1。</p>
+        </div>
+        <div class="timeline-item">
+          <div class="date">2026-10-19</div>
+          <h4>算力铸造的终极形态：2.6.0</h4>
+          <p>仅 2.6.0 单版本便狂烧近 15 亿 Token 进行 Vibe Coding。用 AI 算力硬生生砸出的现代化客户端。</p>
+        </div>
+      </div>
+    </div></section>
+
+    <section id="download" class="section"><div class="container">
+      <div class="section-head"><span class="kicker">DOWNLOAD</span><h2>下载 2.5.6（稳定版）</h2><p>提供自包含与轻量两种 Windows 安装包，均从 CNB Release 直链分发，绿色无捆绑。</p></div>
       <div class="dl-grid">
         <div class="dl-card">
           <h3>自包含合体</h3>
           <span class="tag">推荐 · 双击即跑</span>
-          <p>GUI（Chert Launcher）+ CLI（chert）全部内置 .NET 10 运行时，零依赖，适合绝大多数用户。</p>
+          <p>GUI（Chert Launcher）+ CLI（chert）全部内置 .NET 10 运行时，解压即用。</p>
           <span class="dl-meta">Chert-Launcher-2.5.6-win-x64.zip</span>
           <a href="https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.5.6/Chert-Launcher-2.5.6-win-x64.zip" data-gh="https://github.com/BingJian-REMIX/Chert-WPF/releases/tag/v2.5.6" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载（CNB）</a>
           <a class="dl-mirror" href="https://github.com/BingJian-REMIX/Chert-WPF/releases/tag/v2.5.6" target="_blank" rel="noopener">或 GitHub 镜像 ↗</a>
@@ -88,52 +190,11 @@
         <div class="dl-card">
           <h3>轻量合体</h3>
           <span class="tag">需 .NET 10 运行时</span>
-          <p>GUI + CLI 合体，但共享框架依赖，体积仅约 1 MB。需目标机已安装 .NET 10 桌面运行时。</p>
+          <p>GUI + CLI 合体，共享目标机依赖，体积仅约 1 MB。需目标机已安装运行时。</p>
           <span class="dl-meta">Chert-Light-2.5.6-win-x64.zip</span>
           <a href="https://cnb.cool/RLRS-Studio/Chert-WPF/-/releases/download/v2.5.6/Chert-Light-2.5.6-win-x64.zip" data-gh="https://github.com/BingJian-REMIX/Chert-WPF/releases/tag/v2.5.6" target="_blank" rel="noopener" class="btn btn-primary" style="justify-content:center;width:100%">⬇ 下载（CNB）</a>
           <a class="dl-mirror" href="https://github.com/BingJian-REMIX/Chert-WPF/releases/tag/v2.5.6" target="_blank" rel="noopener">或 GitHub 镜像 ↗</a>
         </div>
-      </div>
-      <p style="margin-top:22px;color:var(--text-2);font-size:14px;line-height:1.8">
-        Linux 开发中；Android 采用独立的 Kotlin 重写，正在开发。完整界面可在 <a href="/preview.html" style="color:var(--accent)">界面预览</a> 体验。启动器内置自动更新，读取本页 <code style="font-family:var(--mono);color:var(--text)">latest.json</code>（主源 CNB，镜像 GitHub）。
-      </p>
-    </div></section>
-
-    <section id="features" class="section"><div class="container">
-      <div class="section-head"><span class="kicker">FEATURES</span><h2>核心特性</h2><p>一套核心，三端同源——你在桌端的习惯，移动端同样顺手。</p></div>
-      <div class="cards">
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg></div><h3>自动更新</h3><p>启动时静默读取 latest.json，发现新版本按需下载、原地替换、接力启动，无需手动操作。</p></div>
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"/></svg></div><h3>多账户与正版登录</h3><p>支持微软 / 离线等多账户切换，凭据本地加密存储，登录状态持久保持。</p></div>
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><h3>整合包一键安装</h3><p>内置 CurseForge / Modrinth 整合包源，搜索、下载、安装一气呵成。</p></div>
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.3-2 5-2 5s3.7-.5 5-2c.7-.8.7-2 0-2.8a2 2 0 0 0-3 .8z"/><path d="M12 15l-3-3a22 22 0 0 1 8-11 6 6 0 0 1 6 6 22 22 0 0 1-11 8z"/></svg></div><h3>局域网 / 广域网联机</h3><p>配对码与 P2P 直连，无需公网服务器也能和朋友一起玩。</p></div>
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg></div><h3>在线音乐与触屏面板</h3><p>多音源在线播放，移动端 / 触屏设备可自定义操控布局。</p></div>
-        <div class="card"><div class="ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L3 18v3h3l6.3-6.3a4 4 0 0 0 5.4-5.4l-2.3 2.3-2-2 2.3-2.3z"/></svg></div><h3>崩溃分析与 AI 助手</h3><p>崩溃日志智能提取与建议，内置可选 AI 助手辅助排查。</p></div>
-      </div>
-    </div></section>
-
-    <section id="changelog" class="section alt"><div class="container">
-      <div class="section-head"><span class="kicker">CHANGELOG</span><h2>更新日志 · 2.5.6（稳定版）</h2></div>
-      <div class="log-entry">
-        <h3>2.5.6（稳定版）<time>2026-09-13</time><span class="badge">stable</span></h3>
-        <div class="notes">2.5.6（稳定版）发布于 2026-09-13，主要更新如下。
-
-【界面与体验】
-· AFK 添加动作支持弹窗选择全部动作类型
-· 皮肤编辑器 3D 预览重打光修正
-· 性能页改为多块实时折线图
-· 下载队列按钮无框无底（保留环形进度）
-· 标题栏新增最大化按钮
-
-【功能与设置】
-· 工具箱移除版本列表 / 版本设置入口
-· 游戏页快速启动仅保留版本库
-· 版本设置页重设计为分区卡片
-· 暗色主题补全控件前景色
-· 添加同名游戏名提示、实时提示统一右下角 toast
-· 音乐播放器页滚动与删除按钮修正
-
-【分发】
-· 新增轻量版 Chert-Light：framework-dependent 单文件，体积约 1 MB，需目标机已安装 .NET 10 桌面运行时；自包含版 Chert-Launcher 仍保持双击即跑、零依赖。</div>
       </div>
     </div></section>
   </main>
@@ -144,37 +205,21 @@
       <a href="https://github.com/BingJian-REMIX/Chert-WPF" target="_blank" rel="noopener">GitHub</a>
       &nbsp;·&nbsp;
       <a href="https://remix-laser-raising-studio.github.io" target="_blank" rel="noopener">工作室官网</a>
-      &nbsp;·&nbsp;
-      <a href="https://cnb.cool/RLRS-Studio" target="_blank" rel="noopener">CNB</a>
     </div>
   </div></footer>
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+    // CNB 探活
+    (function () {
+      var links = Array.prototype.slice.call(document.querySelectorAll('a[data-gh]'));
+      if (!links.length) return;
+      var probe = links[0].getAttribute('href');
+      fetch(probe, { method: 'HEAD' }).then(r => {
+        if (!r.ok) { links.forEach(a => { a.href = a.getAttribute('data-gh'); a.textContent = '⬇ 下载（GitHub）'; }); }
+      }).catch(()=>{});
+    })();
   </script>
-
-  <script>
-  // #178 下载源策略：默认 CNB 直链；cnb 不可达/404 时自动换源 GitHub 镜像。
-  // 由于 cnb 当前未开放 CORS，浏览器无法直接读取其 404 状态，故：
-  //  - 主按钮默认指向 CNB（满足“默认下载链对 cnb”）；
-  //  - 每张卡片提供“或 GitHub 镜像”链接作为始终可用的兜底（满足“cnb404 换源 github”）；
-  //  - 若未来 cnb 放开 CORS，下面的探测会在明确读到非 2xx 时自动把主按钮切到 GitHub。
-  (function () {
-    var links = Array.prototype.slice.call(document.querySelectorAll('a[data-gh]'));
-    if (!links.length) return;
-    var probe = links[0].getAttribute('href');
-    fetch(probe, { method: 'HEAD' })
-      .then(function (r) {
-        if (!r.ok) {
-          links.forEach(function (a) {
-            a.href = a.getAttribute('data-gh');
-            a.textContent = '⬇ 下载（GitHub）';
-          });
-        }
-      })
-      .catch(function () { /* CORS/网络被拦截：保持 CNB 默认，由可见镜像链接兜底 */ });
-  })();
-  </script>
-<script src="/festival-fx.js" defer></script>
+  <script src="/festival-fx.js" defer></script>
 </body>
 </html>
